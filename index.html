@@ -3,10 +3,22 @@
 <html>
    <head> 
       <title> Dustin's Homepage </title>
+      <meta charset="UTF-8">
       <link rel="stylesheet" href="aurekStyle.css">
+      <script src="homeJS.js"></script>
    </head>
    <body>
-      <h2 id="title">Dustin's Home Page</h2>
-      <img src="http://img3.wikia.nocookie.net/__cb20120604055928/starwars/images/9/94/Mandomercmembers.jpg" id="banner" alt="Members of the Mandalorian Mercs Costume Club"/>
+      <h1 id="title">Dustin's Home Page</h1>
+      <input id="toggle" type="button" onclick="toggleBanner()" value="Toggle Banner">
+      <div id="banner" class="banner">
+      	<img src="http://img3.wikia.nocookie.net/__cb20120604055928/starwars/images/9/94/Mandomercmembers.jpg" id="mmcc"alt="Members of the Mandalorian Mercs Costume Club"/>
+      	<div class="mando">
+      		<p id="merc">Found at:<a href="http://starwars.wikia.com/wiki/Mandalorian_Mercs">Star Wars Wiki: Mandalorian Mercs </a></p>
+      	</div>
+  	   </div>  </br>
+  	   <div class="mando">
+  	   	<p id="assignments"><a href="Assignments.html" >Assignments</a></p>
+  	   </div>
+  	 
    </body>
 </html>

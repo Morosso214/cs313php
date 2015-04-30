@@ -1,7 +1,40 @@
 body{
 	background-color: DarkSlateBlue;
 }
+#assignments{
+	color:#8680B2;
+	text-align: center;
+	line-height: 2px;
+}
 #title{
 	text-align: center;
-	color: white;
+	color: PapayaWhip;
+}
+#toggle{
+	margin-right: auto;
+	margin-left: auto;
+}
+div.banner{
+	display: none;
+}
+div.mando{
+	background-color: #5A5097;
+	padding: 1px;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#merc{
+	text-align: center;
+	color:#8680B2;
+	line-height: 2px;
+}
+#mmcc{
+	background-size: auto;
+	margin-left: auto;
+	margin-right: auto;	
+	padding-left: 55px;
+	max-width: 100%;
+	height: auto;
+	width: auto;
 }
