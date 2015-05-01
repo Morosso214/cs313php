@@ -1,8 +1,8 @@
 body{
-	background-color: DarkSlateBlue;
+	background-color: midnightblue;
 }
 #assignments{
-	color:#8680B2;
+	color:midnightblue;
 	text-align: center;
 	line-height: 2px;
 }
@@ -18,7 +18,7 @@ div.banner{
 	display: none;
 }
 div.mando{
-	background-color: #5A5097;
+	background-color: darkseagreen;
 	padding: 1px;
 	width: 300px;
 	margin-left: auto;
@@ -26,7 +26,7 @@ div.mando{
 }
 #merc{
 	text-align: center;
-	color:#8680B2;
+	color:midnightblue;
 	line-height: 2px;
 }
 #mmcc{
