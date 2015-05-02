@@ -1,5 +1,15 @@
 body{
-	background-color: midnightblue;
+	background-color: #339966;
+}
+
+table{
+	width: 500px;
+	text-align: center;
+	padding-bottom: 1px;
+}
+th, td{	
+	color: midnightblue;
+	padding: 5px;
 }
 #assignments{
 	color:midnightblue;
@@ -14,13 +24,20 @@ body{
 	margin-right: auto;
 	margin-left: auto;
 }
-div.banner{
+div.banner, #about{
 	display: none;
 }
 div.mando{
 	background-color: darkseagreen;
 	padding: 1px;
-	width: 300px;
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#about{
+	background-color: darkseagreen;
+	padding: 1px;
+	width: 500px;
 	margin-left: auto;
 	margin-right: auto;
 }

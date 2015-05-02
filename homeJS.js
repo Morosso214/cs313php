@@ -11,3 +11,17 @@ function toggleBanner()
 		document.getElementById("banner").style.display = "none";
 	}
 }
+
+function toggleAbout()
+{
+	var seen = document.getElementById("about");
+	
+	if (seen.style.display == "none")
+	{
+		document.getElementById("about").style.display = "block";
+	} 
+	else
+	{
+		document.getElementById("about").style.display = "none";
+	}
+}
