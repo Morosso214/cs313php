@@ -87,7 +87,7 @@ background-size:100% auto;">
 
 	}
 	else
-		echo "<h4 style=\"text-align:center\"><span class=\"label label-default\">You have already taken the survey</span></h4><br />";
+		echo "<h4 style=\"text-align:center\"><span class=\"label label-danger\">You have already taken the survey</span></h4><br />";
 
 	$file =fopen("results.txt", "w");
 	if($file)
