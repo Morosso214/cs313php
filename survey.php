@@ -1,3 +1,11 @@
+<?php
+	// Start the session
+	session_start();
+
+	// Check to see if the person has taken the survey
+	if (isset($_SESSION['hasTaken']))
+		header( 'Location:/results.php' );
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,35 +39,35 @@
 		</div> 
 		<div class="radio-inline">
 		  <h4><span class="label label-default">Which Star Wars movie was your favorite:</span></h4> <br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode I: The Phantom Menace" >
+		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode I: The Phantom Menace" required>
 		  Star Wars Episode I: The Phantom Menace</label><br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode II: Attack of the Clones">
+		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode II: Attack of the Clones" required>
 		  Star Wars Episode II: Attack of the Clones</label><br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode III: Revenge of the Sith">
+		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode III: Revenge of the Sith" required>
 		  Star Wars Episode III: Revenge of the Sith</label><br />
 		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode IV: A New Hope">
 		  Star Wars Episode IV: A New Hope</label><br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode V: The Empire Strikes Back" >
+		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode V: The Empire Strikes Back" required>
 		  Star Wars Episode V: The Empire Strikes Back</label><br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode VI: Return of the Jedi">
+		  <label class="label label-default"><input type="radio" name="favSW" value="Star Wars Episode VI: Return of the Jedi" required>
 		  Star Wars Episode VI: Return of the Jedi</label><br />
-		  <label class="label label-default"><input type="radio" name="favSW" value="I Haven't Seen Star Wars">I Haven't Seen Star Wars</label><br />
+		  <label class="label label-default"><input type="radio" name="favSW" value="I Haven't Seen Star Wars" required>I Haven't Seen Star Wars</label><br />
 		</div> 
 		<div class="radio-inline">
 		  <h4><span class="label label-default">Pick a lighsaber color:</span></h4><br />
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Green">Green</label>
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Yellow">Yellow</label><br />
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Purple">Purple</label>
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Cyan">Cyan</label><br />
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Orange">Orange</label>		  
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Blue">Blue</label><br />		  
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Veridian">Veridian</label>
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Silver">Silver</label><br />		  
-		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Red">Red</label>
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Green" required>Green</label>
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Yellow" required>Yellow</label><br />
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Purple" required>Purple</label>
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Cyan" required>Cyan</label><br />
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Orange" required>Orange</label>		  
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Blue" required>Blue</label><br />		  
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Veridian" required>Veridian</label>
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Silver" required>Silver</label><br />		  
+		  <label class="label label-default radio-inline"><input type="radio" name="lcolor" value="Red" required>Red</label>
 		</div> 
 		<div class="input-inline">
 			<h4><span class="label label-default">Who is your favorite Star Wars Character:</span></h4><br />
-			<input type="text" class="form-control input-inline" id="usr" name="favChar"placeholder="Boba Fett">
+			<input type="text" class="form-control input-inline" id="usr" name="favChar"placeholder="Boba Fett" required>
 			<input type="submit" class="btn btn-default btn-xs" name="submit" value="Submit">
 			<a href="results.php" class="btn btn-default btn-xs" role="button">See Results</a>
 		</div>

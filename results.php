@@ -1,3 +1,8 @@
+<?php
+	// Start the session
+	session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,15 +21,15 @@ background-size:100% auto;">
 	$movie = $color = $favchar = ""; // Initialize member variables to work with the results of the most recent survey
 	
 	// Set up the arrays to store the results of the survey 
-	$numSeen = array('Star Wars Episode I: The Phantom Menace' => '0', 'Star Wars Episode II: Attack of the Clones' => '0', 
-		'Star Wars Episode III: Revenge of the Sith' => '0', 'Star Wars Episode IV: A New Hope' => '0',
-	    'Star Wars Episode V: The Empire Strikes Back' => '0', 'Star Wars Episode VI: Return of the Jedi' => '0',
+	$numSeen = array('Star Wars Episode I: The Phantom Menace' => '1', 'Star Wars Episode II: Attack of the Clones' => '1', 
+		'Star Wars Episode III: Revenge of the Sith' => '1', 'Star Wars Episode IV: A New Hope' => '1',
+	    'Star Wars Episode V: The Empire Strikes Back' => '1', 'Star Wars Episode VI: Return of the Jedi' => '1',
 	    'I Haven\'t Seen Star Wars' => '0'); 
 	$numFavMovie = array('Star Wars Episode I: The Phantom Menace' => '0', 'Star Wars Episode II: Attack of the Clones' => '0', 
-		'Star Wars Episode III: Revenge of the Sith' => '0', 'Star Wars Episode IV: A New Hope' => '0',
+		'Star Wars Episode III: Revenge of the Sith' => '0', 'Star Wars Episode IV: A New Hope' => '1',
 	    'Star Wars Episode V: The Empire Strikes Back' => '0', 'Star Wars Episode VI: Return of the Jedi' => '0',
 	    'I Haven\'t Seen Star Wars' => '0');
-	$numLcolor = array('Green' => '0', 'Purple' => '0', 'Yellow' => '0', 'Cyan' => '0', 'Orange' => '0', 'Blue' => '0', 'Veridian' => '0',
+	$numLcolor = array('Green' => '0', 'Purple' => '0', 'Yellow' => '0', 'Cyan' => '0', 'Orange' => '1', 'Blue' => '0', 'Veridian' => '0',
 	    'Silver' => '0', 'Red' => '0');
 	$numFavChars = array('Stormtrooper TK-421' => '1');
 
@@ -52,7 +57,7 @@ background-size:100% auto;">
     fclose($file);
 
 	// Set the variables to the ones that were passed in and increment each array for display
-	if (!isset($_COOKIE['hasTaken']))
+	if (!isset($_SESSION['hasTaken']))
 	{
 		if ($_SERVER["REQUEST_METHOD"] == "POST") 
 		{
