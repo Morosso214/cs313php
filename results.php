@@ -127,11 +127,8 @@ function test_input($data) {
 } 
 	
 	if (isset($_POST['favChar']))
- 		{
- 			$cookieName = "hasTaken";
- 			$cookieVal = rand();
- 			setcookie($cookieName, $cookieVal, time() + 1800, "/"); 
- 			
+ 		{ 			
+ 			$_SESSION['hasTaken'] = true; 			
  		}
 	?>
 	<div class="panel-group col-md-6">
