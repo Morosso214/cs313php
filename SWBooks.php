@@ -40,7 +40,8 @@
 				if (isset($_POST['author']))
 				{
   					$author = test_input($_POST["author"]);
-  					$query = "SELECT title, author_name FROM sw_book WHERE author_name=:name;";
+  					$author = "%" . $author . "%";
+  					$query = "SELECT title, author_name FROM sw_book WHERE author_name LIKE :name;";
   					$stmt = $db->prepare($query);
   					$stmt->bindValue(':name', $author);
   					$stmt->execute();
