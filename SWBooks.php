@@ -10,7 +10,7 @@
 </head>
 <body style="background-image: url(http://cdn29.us3.fansshare.com/images/starwars/star-wars-logo-logo-922413625.jpg); background-size:100% auto;">
 	<div>
-		<h2 style="text-align:center;"> <span class="label label-primary">Star Wars Book Inventory</span></h2><br />
+		<h2 style="text-align:center;"> <span class="label label-primary">Star Wars Book Inventory Search</span></h2><br />
 		<?php
 			require("dbConn.php");
 		if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -40,11 +40,14 @@
 				if (isset($_POST['author']))
 				{
   					$author = test_input($_POST["author"]);
-  					$author = "%" . $author . "%";
-  					$query = "SELECT title, author_name FROM sw_book WHERE author_name LIKE :name;";
-  					$stmt = $db->prepare($query);
-  					$stmt->bindValue(':name', $author);
-  					$stmt->execute();
+  					if ($author != '')
+  					{
+	  					$author = "%" . $author . "%";
+	  					$query = "SELECT title, author_name FROM sw_book WHERE author_name LIKE :name;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':name', $author);
+	  					$stmt->execute();
+	  				}
 
   					foreach ($stmt->fetchAll() as $row ) {
   						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
@@ -54,10 +57,14 @@
   				if (isset($_POST['character']))
 				{
   					$character = test_input($_POST["character"]);
-  					$query = "SELECT * FROM sw_book b JOIN sw_book_character sbc ON b.id = sbc.book_id JOIN sw_character sc ON sc.id = sbc.char_id WHERE sc.name=:name;";
-  					$stmt = $db->prepare($query);
-  					$stmt->bindValue(':name', $character);
-  					$stmt->execute();
+  					if ($character != '')
+  					{
+  						$character = "%" . $character . "%";
+ 	  					$query = "SELECT * FROM sw_book b JOIN sw_book_character sbc ON b.id = sbc.book_id JOIN sw_character sc ON sc.id = sbc.char_id WHERE sc.name LIKE :name;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':name', $character);
+	  					$stmt->execute();
+	  				}
   					foreach ($stmt->fetchAll() as $row ) {
   						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['name'] . ' is in ' . $row['title'] . "</span></h4><br />";
   					}
@@ -65,13 +72,34 @@
   				if (isset($_POST['book']))
 				{
   					$title = test_input($_POST["book"]);
-  					$query = "SELECT title, author_name FROM sw_book WHERE title=:title;";
-  					$stmt = $db->prepare($query);
-  					$stmt->bindValue(':title', $title);
-  					$stmt->execute();
+  					if ($title != '')
+  					{
+  						$title = "%" . $title . "%";
+	  					$query = "SELECT title, author_name FROM sw_book WHERE title LIKE :title;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':title', $title);
+	  					$stmt->execute();
+	  				}
 
   					foreach ($stmt->fetchAll() as $row ) {
   						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
+  					}
+  				}
+  				if (isset($_POST['set']))
+				{
+  					$setName = test_input($_POST["set"]);
+  					if ($setName != '')
+  					{
+  						$setName = "%" . $setName . "%";
+	  					$query = "SELECT * FROM sw_book  b JOIN book_set s ON b.set_id = s.id WHERE s.name LIKE :name;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':name', $setName);
+	  					$stmt->execute();
+	  				}
+  					foreach ($stmt->fetchAll() as $row ) {
+  						$output = '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'];
+  						$output .= ' is in ' . $row['name'] . "</span></h4><br />";
+  						echo $output;
   					}
   				}  				
 			}
@@ -101,10 +129,14 @@
 		<input type="text" class="form-control input-inline" id="usr" name="character" placeholder="R2-D2">
 		<h4><span class="label label-default">Search by Title:</span></h4>
 		<input type="text" class="form-control input-inline" id="usr" name="book" placeholder="Dark Force Rising">
+		<h4><span class="label label-default">Search by Set Name:</span></h4>
+		<input type="text" class="form-control input-inline" id="usr" name="set" placeholder="The Thrawn Trilogy">
 		<h4><span class="label label-default">Search by Year:</span></h4>
 		<input type="text" class="form-control input-inline" id="usr" name="year" placeholder="ABY or BBY"><br /> <br />
 		<input type="submit" class="btn btn-default btn-sm" name="submit" value="See Books">
-		</span></form>
+		</form>
+		<a href="SWInsert.php"class="btn btn-default btn-sm" role="button">Insert a Book</a>
+		<a href="SWDelete.php"class="btn btn-default btn-sm" role="button">Delete a Book</a></span>
 
 	</div>
 
