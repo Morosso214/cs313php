@@ -24,10 +24,7 @@
 				$bookNum = 0;
 				$charArr;
 				$charName = '';
-				// INSERT INTO SET FIRST
-				// INSERT INTO CHARACTER NEXT
-				// INSERT INTO BOOK NEXT
-				// INSERT INTO BOOK_CHARACTER LAST
+				
 				if (isset($_POST['setName']))
 					{
 	  					$setName = test_input($_POST["setName"]);
@@ -46,7 +43,7 @@
 	  					$charName = test_input($_POST["character"]);
 	  					if ($charName != '')
 	  					{
-	  						$charArr = explode(',', $charName);
+	  						$charArr = explode(', ', $charName);
 	  						foreach ($charArr as $val)
 	  						{
 	  							$query = "INSERT INTO sw_character(name) VALUES (:charName);";
@@ -56,10 +53,10 @@
 	  						}	  					
 		  				}  					
 	  				}
-	  				if (isset($_POST['author']) && isset($_POST['title']) && isset($_POST['year']) && isset($_POST['chron']))
+	  				if (isset($_POST['author']))
 					{
 	  					$author = test_input($_POST["author"]);
-	  					$title = test_input($_POST["title"]);
+	  					$title = test_input($_POST["book"]);
 	  					$year = test_input($_POST["year"]);
 	  					$chron = test_input($_POST["chron"]);
 	  					$chronId;
@@ -174,9 +171,9 @@
 		<h4><span class="label label-default">Insert Author 2 (optional):</span></h4>
 		<input type="text" class="form-control input-inline" id="usr2" name="author2" placeholder="Michael Reaves">
 		<h4><span class="label label-default">Insert Main Characters (comma separated):</span></h4>
-		<textarea class="form-control input-inline" rows="6" id="person" cols="22"name="character" placeholder="Luke Skywalker, (1 per line)" required></textarea>
+		<textarea class="form-control input-inline" rows="6" id="person" cols="22"name="character" placeholder="Luke Skywalker, Han Solo, etc..." required></textarea>
 		<h4><span class="label label-default">Insert Title With 'Star Wars: '</span></h4>
-		<input type="text" class="form-control input-inline" id="title" name="book" placeholder="Star Wars: Dark Force Rising" required>
+		<input type="text" class="form-control input-inline" id="book" name="book" placeholder="Star Wars: Dark Force Rising" required>
 		<h4><span class="label label-default">Insert Set Name (Optional):</span></h4>
 		<input type="text" class="form-control input-inline" id="set" name="setName" placeholder="The Thrawn Trilogy">
 		<h4><span class="label label-default">Insert Year with description (ABY or BBY):</span></h4>		
