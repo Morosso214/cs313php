@@ -19,7 +19,7 @@
 		<form class="form-inline" role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<span style="text-align:center; display: block; margin: 0 auto;">
 		<h4><span class="label label-default">Delete Characters (comma separated):</span></h4>
-		<textarea class="form-control input-inline" rows="6" id="usr" cols="22"name="character" placeholder="loke Skywalker, (1 per line)"></textarea>
+		<textarea class="form-control input-inline" rows="6" id="usr" cols="22"name="character" placeholder="loke Skywalker, Bib Frotuna, etc..."></textarea>
 		<h4><span class="label label-default">Delete Title: '</span></h4>
 		<input type="text" class="form-control input-inline" id="usr" name="book" placeholder="Star War: DarkForce Rising">
 		<h4><span class="label label-default">Delete Set Name :</span></h4>
