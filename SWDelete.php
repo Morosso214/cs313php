@@ -24,89 +24,98 @@
 				$charArr;
 				$charName = '';
 				echo '<h4 style="text-align:center;"><span class="label label-info">Delete in progress... I hope you know what you are doing.</span></h4><br />';
-				if (isset($_POST['thrawn']))
-					{
-	  					$setName = test_input($_POST["thrawn"]);
-	  					if ($setName != '')
-	  					{
-	  						$query = "SELECT name FROM book_set WHERE name=:setName;";
-	  						$stmt = $db->prepare($query);
-	  						$stmt->bindValue(':setName', $setName);
-	  						$stmt->execute();
-	  						$temp = $stmt->fetch();
-	  						$tempVal = $temp['name'];
-
-	  						$stmt->closeCursor();
-	  						
-	  						if ($tempVal == $setName)
-	  						{
-	  							$query = "DELETE FROM book_set WHERE name =  :setName;";
-		  						$stmt = $db->prepare($query);
-		  						$stmt->bindValue(':setName', $setName);
-		  						$stmt->execute();
-		  					}
-		  				}  					
-	  				}
-	  				if (isset($_POST['character']))
-					{
-	  					$charName = test_input($_POST["character"]);
-	  					if ($charName != '')
-	  					{
-	  						$charArr = explode(', ', $charName);
-	  						foreach ($charArr as $val)
-	  						{
-	  							$query = "SELECT name FROM sw_character WHERE name=:name;";
-	  							$stmt = $db->prepare($query);
-	  							$stmt->bindValue(':name', $val);
-	  							$stmt->execute();
-	  							$temp = $stmt->fetch();
-	  							$tempVal = $temp['name'];
-								
-								if ($tempVal == $val)
-								{
-	   								$query = "DELETE FROM sw_character WHERE name=:charName;";
-		  							$stmt = $db->prepare($query);
-		  							$stmt->bindValue(':charName', $val);
-		  							$stmt->execute();
-		  						}
-	  						}	  					
-		  				}  					
-	  				}
-	  				if (isset($_POST['book']))
+				if (isset($_POST['book']))
+	  			{
+	  				$book = test_input($_POST['book']);
+	  				if ($book != '')
 	  				{
-	  					$book = test_input($_POST['book']);
-	  					if ($book != '')
-	  					{
-	  						$query = "SELECT name FROM sw_book WHERE title=:title;";
+	  					$query = "SELECT id FROM sw_book WHERE title=:title;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':title', $book);
+	  					$stmt->execute();
+	  					$temp = $stmt->fetch();
+	  					$bookNum = $temp[0];
+
+  						// delete from many-many
+  						$query = "DELETE FROM sw_book_character WHERE book_id=:book;";
+	  					$stmt = $db->prepare($query);
+	  					$stmt->bindValue(':book', $bookNum);
+	  					$stmt->execute();
+
+	  					$stmt->closeCursor();
+
+  						$query = "SELECT title FROM sw_book WHERE title=:title;";
+  						$stmt = $db->prepare($query);
+  						$stmt->bindValue(':title', $book);
+  						$stmt->execute();
+  						$temp = $stmt->fetch();
+  						$tempVal = $temp['title'];
+						
+						if ($tempVal == $book)
+						{
+   							$query = "DELETE FROM sw_book WHERE title=:title;";
 	  						$stmt = $db->prepare($query);
 	  						$stmt->bindValue(':title', $book);
 	  						$stmt->execute();
-	  						$temp = $stmt->fetch();
-	  						$tempVal = $temp['name'];
-							
-							if ($tempVal == $book)
-							{
-	   							$query = "DELETE FROM sw_book WHERE title=:title);";
-		  						$stmt = $db->prepare($query);
-		  						$stmt->bindValue(':title', $book);
-		  						$stmt->execute();
-
-	  							$bookNum = $db->lastInsertId(); // IS THIS A THING with delete?
-								echo '<h4 style="text-align:center;"><span class="label label-info">' . $bookNum . '</span></h4><br />';
-								// delete from many-many
-	   							$query = "DELETE FROM sw_book_character WHERE book_id=:book);";
-		  						$stmt = $db->prepare($query);
-		  						$stmt->bindValue(':book', $bookNum);
-		  						$stmt->execute();
-		  					}
+								
 	  					}
-	  				}
+  					}
+	  			}
+	
+				if (isset($_POST['thrawn']))
+				{
+					$setName = test_input($_POST["thrawn"]);
+					if ($setName != '')
+					{
+						$query = "SELECT name FROM book_set WHERE name=:setName;";
+						$stmt = $db->prepare($query);
+						$stmt->bindValue(':setName', $setName);
+						$stmt->execute();
+						$temp = $stmt->fetch();
+						$tempVal = $temp['name'];
 
+  						$stmt->closeCursor();
+	  						
+ 						if ($tempVal == $setName)
+  						{
+  							$query = "DELETE FROM book_set WHERE name =  :setName;";
+	  						$stmt = $db->prepare($query);
+	  						$stmt->bindValue(':setName', $setName);
+	  						$stmt->execute();
+	  					}
+	  				}  					
+  				}
+
+  				if (isset($_POST['character']))
+				{
+  					$charName = test_input($_POST["character"]);
+  					if ($charName != '')
+  					{
+  						$charArr = explode(', ', $charName);
+  						foreach ($charArr as $val)
+  						{
+  							$query = "SELECT name FROM sw_character WHERE name=:name;";
+  							$stmt = $db->prepare($query);
+  							$stmt->bindValue(':name', $val);
+  							$stmt->execute();
+  							$temp = $stmt->fetch();
+  							$tempVal = $temp['name'];
+							
+							if ($tempVal == $val)
+							{
+   								$query = "DELETE FROM sw_character WHERE name=:charName;";
+	  							$stmt = $db->prepare($query);
+	  							$stmt->bindValue(':charName', $val);
+	  							$stmt->execute();
+	  						}
+  						}	  					
+	  				}  					
+  				}
 				
 			}
 			catch (PDOEXCEPTION $ex)
 			{
-				echo 'Something bad happened!';
+				echo '<h4 style="text-align:center;"><span class="label label-info">Something bad happened! Details: ' . $ex . '</span></h4><br />';
 			}
 
 		}
