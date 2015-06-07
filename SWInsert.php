@@ -20,6 +20,8 @@
 				$db = loadDatabase();
 				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$isSetName = false;
+				$insertBook = false;
+				$insertChar = false;
 				$setNum = 0;
 				$bookNum = 0;
 				$charArr;
@@ -30,12 +32,22 @@
 	  					$setName = test_input($_POST["setName"]);
 	  					if ($setName != '')
 	  					{
-	  						$isSetName = true; 
-		  					$query = "INSERT INTO book_set(name) VALUES (:setName);";
-		  					$stmt = $db->prepare($query);
-		  					$stmt->bindValue(':setName', $setName);
-		  					$stmt->execute();
-		  					$setNum = $db->lastInsertId();
+	  						$isSetName = true;
+	  						$query = "SELECT name FROM book_set WHERE name=:setName;";
+	  						$stmt = $db->prepare($query);
+	  						$stmt->bindValue(':setName', $setName);
+	  						$stmt->execute();
+	  						$temp = $stmt->fetch();
+	  						$tempVal = $temp['name'];
+	  						
+	  						if ($tempVal != $setName)
+	  						{	  							 
+		  						$query = "INSERT INTO book_set(name) VALUES (:setName);";
+		  						$stmt = $db->prepare($query);
+		  						$stmt->bindValue(':setName', $setName);
+		  						$stmt->execute();
+		  						$setNum = $db->lastInsertId();
+		  					}
 		  				}  					
 	  				}
 	  				if (isset($_POST['character']))
@@ -46,11 +58,22 @@
 	  						$charArr = explode(', ', $charName);
 	  						foreach ($charArr as $val)
 	  						{
-	  							$query = "INSERT INTO sw_character(name) VALUES (:charName);";
-		  						$stmt = $db->prepare($query);
-		  						$stmt->bindValue(':charName', $val);
-		  						$stmt->execute();
-	  						}	  					
+								$query = "SELECT name FROM sw_character WHERE name=:name;";
+	  							$stmt = $db->prepare($query);
+	  							$stmt->bindValue(':name', $val);
+	  							$stmt->execute();
+	  							$temp = $stmt->fetch();
+	  							$tempVal = $temp['name'];
+								
+								if ($tempVal != $val)
+								{
+									$insertChar = true;
+	   								$query = "INSERT INTO sw_character(name) VALUES (:charName);";
+		  							$stmt = $db->prepare($query);
+		  							$stmt->bindValue(':charName', $val);
+		  							$stmt->execute();
+	  							}	  	
+	  						}				
 		  				}  					
 	  				}
 	  				if (isset($_POST['author']))
@@ -64,87 +87,101 @@
 	  						$chronId = 1;
 	  					else
 	  						$chronId = 2;
+
 	  					if (($author != '') && ($title != '') && ($year != '') && ($chron != ''))
 	  					{
-	  						if (isset($_POST['author2']))
-	  						{
-	  							$author2 = test_input($_POST['author2']);
-	  							if ($author2 != '')
+	  						$query = "SELECT title FROM sw_book WHERE title=:title;";
+	  						$stmt = $db->prepare($query);
+	  						$stmt->bindValue(':title', $title);
+	  						$stmt->execute();
+	  						$temp = $stmt->fetch();
+	  						$tempVal = $temp['name'];
+							
+							if ($tempVal != $title)
+							{
+								$insertBook = true;
+	  							if (isset($_POST['author2']))
 	  							{
-	  								if ($isSetName)
+	  								$author2 = test_input($_POST['author2']);
+	  								if ($author2 != '')
 	  								{
-	  									$query = "INSERT INTO sw_book(title, set_id, chron_id, year, author_name, author2_name) ";
-	  									$query .= "VALUES (:title, :setNum, :chronId, :year, :author, :author2);";
-		  								$stmt = $db->prepare($query);
-		  								$stmt->bindValue(':title', $title);
-		  								$stmt->bindValue(':setNum', $setNum);
-		  								$stmt->bindValue(':chronId', $chronId);
-		  								$stmt->bindValue(':year', $year);
-		  								$stmt->bindValue(':author', $author);
-		  								$stmt->bindValue(':author2', $author2);
-		  								$stmt->execute();
+	  									if ($isSetName)
+	  									{
+	  										$query = "INSERT INTO sw_book(title, set_id, chron_id, year, author_name, author2_name) ";
+	  										$query .= "VALUES (:title, :setNum, :chronId, :year, :author, :author2);";
+		  									$stmt = $db->prepare($query);
+		  									$stmt->bindValue(':title', $title);
+		  									$stmt->bindValue(':setNum', $setNum);
+		  									$stmt->bindValue(':chronId', $chronId);
+		  									$stmt->bindValue(':year', $year);
+		  									$stmt->bindValue(':author', $author);
+		  									$stmt->bindValue(':author2', $author2);
+		  									$stmt->execute();
+	  									}
+	  									else
+	  									{
+	  										$query = "INSERT INTO sw_book(title, chron_id, year, author_name, author2_name) ";
+	  										$query .= "VALUES (:title, :chronId, :year, :author, :author2);";
+		  									$stmt = $db->prepare($query);
+		  									$stmt->bindValue(':title', $title);
+		  									$stmt->bindValue(':chronId', $chronId);
+		  									$stmt->bindValue(':year', $year);
+		  									$stmt->bindValue(':author', $author);
+		  									$stmt->bindValue(':author2', $author2);
+		  									$stmt->execute();
+	  									}
 	  								}
 	  								else
 	  								{
-	  									$query = "INSERT INTO sw_book(title, chron_id, year, author_name, author2_name) ";
-	  									$query .= "VALUES (:title, :chronId, :year, :author, :author2);";
-		  								$stmt = $db->prepare($query);
-		  								$stmt->bindValue(':title', $title);
-		  								$stmt->bindValue(':chronId', $chronId);
-		  								$stmt->bindValue(':year', $year);
-		  								$stmt->bindValue(':author', $author);
-		  								$stmt->bindValue(':author2', $author2);
-		  								$stmt->execute();
+	  									if ($isSetName)
+	  									{
+			  								$query = "INSERT INTO sw_book(title, set_id, chron_id, year, author_name) ";
+			  								$query .= "VALUES (:title, :setNum, :chronId, :year, :author);";
+				  							$stmt = $db->prepare($query);
+				  							$stmt->bindValue(':title', $title);
+				  							$stmt->bindValue(':setNum', $setNum);
+				  							$stmt->bindValue(':chronId', $chronId);
+				  							$stmt->bindValue(':year', $year);
+				  							$stmt->bindValue(':author', $author);
+				  							$stmt->execute();
+			  							}
+			  							else
+			  							{
+			  								$query = "INSERT INTO sw_book(title, chron_id, year, author_name) ";
+			  								$query .= "VALUES (:title, :chronId, :year, :author);";
+				  							$stmt = $db->prepare($query);
+				  							$stmt->bindValue(':title', $title);
+				  							$stmt->bindValue(':chronId', $chronId);
+				  							$stmt->bindValue(':year', $year);
+				  							$stmt->bindValue(':author', $author);
+				  							$stmt->execute();
+			  							}
 	  								}
 	  							}
-	  							else
-	  							{
-	  								if ($isSetName)
-	  								{
-			  							$query = "INSERT INTO sw_book(title, set_id, chron_id, year, author_name) ";
-			  							$query .= "VALUES (:title, :setNum, :chronId, :year, :author);";
-				  						$stmt = $db->prepare($query);
-				  						$stmt->bindValue(':title', $title);
-				  						$stmt->bindValue(':setNum', $setNum);
-				  						$stmt->bindValue(':chronId', $chronId);
-				  						$stmt->bindValue(':year', $year);
-				  						$stmt->bindValue(':author', $author);
-				  						$stmt->execute();
-			  						}
-			  						else
-			  						{
-			  							$query = "INSERT INTO sw_book(title, chron_id, year, author_name) ";
-			  							$query .= "VALUES (:title, :chronId, :year, :author);";
-				  						$stmt = $db->prepare($query);
-				  						$stmt->bindValue(':title', $title);
-				  						$stmt->bindValue(':chronId', $chronId);
-				  						$stmt->bindValue(':year', $year);
-				  						$stmt->bindValue(':author', $author);
-				  						$stmt->execute();
-			  						}
-	  							}
-	  						}
-	  						
-	  						
+	  							$bookNum = $db->lastInsertId();
+	  						}	  						
 	  							  					
-							$bookNum = $db->lastInsertId();
-							foreach($charArr as $val)
+							
+							if ($insertBook)
 							{
-								$query = "SELECT id FROM sw_character WHERE name=:name;";
-								$stmt = $db->prepare($query);
-								$stmt->bindValue(':name', $val);
-								$stmt->execute();
-								$Temp = $stmt->fetch();
-								$charId = $Temp[0];
+								foreach($charArr as $val)
+								{
+									$query = "SELECT id FROM sw_character WHERE name=:name;";
+									$stmt = $db->prepare($query);
+									$stmt->bindValue(':name', $val);
+									$stmt->execute();
+									$Temp = $stmt->fetch();
+									$charId = $Temp[0];
 								
-								$stmt->closeCursor();
+									$stmt->closeCursor();
 
-								$query = "INSERT INTO sw_book_character(book_id, char_id) VALUES(:book, :character);";
-								$stmt = $db->prepare($query);
-								$stmt->bindValue(':book', $bookNum);
-								$stmt->bindValue(':character', $charId);
-								$stmt->execute();
-							}   							  					
+									$query = "INSERT INTO sw_book_character(book_id, char_id) VALUES(:book, :character);";
+									$stmt = $db->prepare($query);
+									$stmt->bindValue(':book', $bookNum);
+									$stmt->bindValue(':character', $charId);
+									$stmt->execute();
+								} 
+							}  							  					
 		  				}  					
 	  				}
 
