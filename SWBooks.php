@@ -20,8 +20,25 @@
 			{
 				$db = loadDatabase();
 				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$character = test_input($_POST["character"]);
+				$title = test_input($_POST["book"]);
+				$setName = test_input($_POST["set"]);
+				$author = test_input($_POST["author"]);
+				$author2 = '';
 				$query = '';
 				$stmt = '';
+
+
+				if ($title != '')
+				{
+					$title = "%" . $title . "%";
+					$query = "SELECT * FROM sw_book WHERE title LIKE :title;";
+	  				$stmt = $db->prepare($query);
+	  				$stmt->bindValue(':title', $title);
+	  				$stmt->execute();
+	  				$temp = $stmt->fetch();
+  					$author2 = $temp['author2_name'];
+				}
 
 				if (isset($_POST['year']))
   				{
@@ -32,75 +49,128 @@
 	  				$stmt->execute();
 
   					foreach ($stmt->fetchAll() as $row ) {
-  						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' takes place ' . $row['year'] . " " . $row['name'] . "</span></h4><br />";
+  						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . ' takes place ' . $row['year'] . " " . $row['name'] . "</span></h4><br />";
   					}  				
 				
 				}
 
-				if (isset($_POST['author']))
+
+				if (($character != '') && ($author != '') && ($title != '') && ($setName != ''))
 				{
-  					$author = test_input($_POST["author"]);
-  					if ($author != '')
-  					{
-	  					$author = "%" . $author . "%";
-	  					$query = "SELECT title, author_name FROM sw_book WHERE author_name LIKE :name;";
-	  					$stmt = $db->prepare($query);
-	  					$stmt->bindValue(':name', $author);
-	  					$stmt->execute();
-	  				}
+					$character = "%" . $character . "%";
+					$author = "%" . $author . "%";
+					$title = "%" . $title . "%";
+					$setName = "%" . $setName . "%";
+					$query = "SELECT title, c.name AS characterName, sbs.name AS setName, author_name FROM sw_character c JOIN sw_book_character sbc ON c.id = sbc.char_id JOIN sw_book b ON sbc.book_id = b.id JOIN book_set sbs ON b.set_id = sbs.id WHERE c.name LIKE :cname AND title LIKE :title AND author_name LIKE :aname AND sbs.name LIKE :sname;";
+					$stmt = $db->prepare($query);
+					$stmt->bindValue(':cname', $character);
+					$stmt->bindValue(':aname', $author);
+					$stmt->bindValue(':sname', $setName);
+					$stmt->bindValue(':title', $title);
+					$stmt->execute();
+
+					foreach ($stmt->fetchAll() as $row ) {
+  						$out = '<h4 style="text-align:center;"><span class="label label-default">' . $row['characterName'];
+  						$out .= ' is in ' . $row['title'] . ' Which belongs to set ' . $row['setName'];
+  						$out .= ' by ' . $row['author_name'] . "</span></h4><br />";
+  						echo $out; 
+  					}
+
+				}
+				elseif (($character != '') && ($author != '') && ($title != ''))
+				{
+					$character = "%" . $character . "%";
+					$author = "%" . $author . "%";
+					$title = "%" . $title . "%";
+					$setName = "%" . $setName . "%";
+					$query = "SELECT title, c.name AS characterName, author_name FROM sw_character c JOIN sw_book_character sbc ON c.id = sbc.char_id JOIN sw_book b ON sbc.book_id = b.id WHERE c.name LIKE :cname AND title LIKE :title AND author_name LIKE :aname;";
+					$stmt = $db->prepare($query);
+					$stmt->bindValue(':cname', $character);
+					$stmt->bindValue(':aname', $author);
+					$stmt->bindValue(':title', $title);
+					$stmt->execute();
+
+					foreach ($stmt->fetchAll() as $row ) {
+  						$out = '<h4 style="text-align:center;"><span class="label label-default">' . $row['characterName'];
+  						$out .= ' is in ' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
+  						echo $out; 
+  					}
+
+				}
+				elseif (($character != '') && ($author != '') && ($setName != ''))
+				{
+					$character = "%" . $character . "%";
+					$author = "%" . $author . "%";
+					$title = "%" . $title . "%";
+					$setName = "%" . $setName . "%";
+					$query = "SELECT title, c.name AS characterName, sbs.name AS setName, author_name FROM sw_character c JOIN sw_book_character sbc ON c.id = sbc.char_id JOIN sw_book b ON sbc.book_id = b.id JOIN book_set sbs ON b.set_id = sbs.id WHERE c.name LIKE :cname AND author_name LIKE :aname AND sbs.name LIKE :sname;";
+					$stmt = $db->prepare($query);
+					$stmt->bindValue(':cname', $character);
+					$stmt->bindValue(':aname', $author);
+					$stmt->bindValue(':sname', $setName);
+					$stmt->execute();
+
+					foreach ($stmt->fetchAll() as $row ) {
+  						$out = '<h4 style="text-align:center;"><span class="label label-default">' . $row['characterName'];
+  						$out .= ' is in ' . $row['title'] . ' Which belongs to set ' . $row['setName'];
+  						$out .= ' by ' . $row['author_name'] . "</span></h4><br />";
+  						echo $out; 
+  					}
+
+				}				
+				elseif ($character != '')
+  				{
+  					$character = "%" . $character . "%";
+ 	  				$query = "SELECT * FROM sw_book b JOIN sw_book_character sbc ON b.id = sbc.book_id JOIN sw_character sc ON sc.id = sbc.char_id WHERE sc.name LIKE :name;";
+	  				$stmt = $db->prepare($query);
+	  				$stmt->bindValue(':name', $character);
+	  				$stmt->execute();
+	  			
+  					foreach ($stmt->fetchAll() as $row ) {
+  						$out = '<h4 style="text-align:center;"><span class="label label-default">' . $row['name'];
+  						$out .= ' is in ' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
+  						echo $out; 
+  					}
+  				}
+  				
+				elseif ($title != '')
+  				{
+  					$title = "%" . $title . "%";
+	  				$query = "SELECT title, author_name FROM sw_book WHERE title LIKE :title;";
+	  				$stmt = $db->prepare($query);
+	  				$stmt->bindValue(':title', $title);
+	  				$stmt->execute();
 
   					foreach ($stmt->fetchAll() as $row ) {
   						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
   					}
-
   				}
-  				if (isset($_POST['character']))
-				{
-  					$character = test_input($_POST["character"]);
-  					if ($character != '')
-  					{
-  						$character = "%" . $character . "%";
- 	  					$query = "SELECT * FROM sw_book b JOIN sw_book_character sbc ON b.id = sbc.book_id JOIN sw_character sc ON sc.id = sbc.char_id WHERE sc.name LIKE :name;";
-	  					$stmt = $db->prepare($query);
-	  					$stmt->bindValue(':name', $character);
-	  					$stmt->execute();
-	  				}
-  					foreach ($stmt->fetchAll() as $row ) {
-  						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['name'] . ' is in ' . $row['title'] . "</span></h4><br />";
-  					}
-  				}
-  				if (isset($_POST['book']))
-				{
-  					$title = test_input($_POST["book"]);
-  					if ($title != '')
-  					{
-  						$title = "%" . $title . "%";
-	  					$query = "SELECT title, author_name FROM sw_book WHERE title LIKE :title;";
-	  					$stmt = $db->prepare($query);
-	  					$stmt->bindValue(':title', $title);
-	  					$stmt->execute();
-	  				}
-
-  					foreach ($stmt->fetchAll() as $row ) {
-  						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
-  					}
-  				}
-  				if (isset($_POST['set']))
-				{
-  					$setName = test_input($_POST["set"]);
-  					if ($setName != '')
-  					{
-  						$setName = "%" . $setName . "%";
-	  					$query = "SELECT * FROM sw_book  b JOIN book_set s ON b.set_id = s.id WHERE s.name LIKE :name;";
-	  					$stmt = $db->prepare($query);
-	  					$stmt->bindValue(':name', $setName);
-	  					$stmt->execute();
-	  				}
+				elseif ($setName != '')
+  				{
+  					$setName = "%" . $setName . "%";
+	  				$query = "SELECT * FROM sw_book  b JOIN book_set s ON b.set_id = s.id WHERE s.name LIKE :name;";
+	  				$stmt = $db->prepare($query);
+	  				$stmt->bindValue(':name', $setName);
+	  				$stmt->execute();
+	  			
   					foreach ($stmt->fetchAll() as $row ) {
   						$output = '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'];
   						$output .= ' is in ' . $row['name'] . "</span></h4><br />";
   						echo $output;
   					}
+  				}
+				elseif ($author != '')
+  				{
+	  				$author = "%" . $author . "%";
+	  				$query = "SELECT title, author_name FROM sw_book WHERE author_name LIKE :name;";
+	  				$stmt = $db->prepare($query);
+	  				$stmt->bindValue(':name', $author);
+	  				$stmt->execute();
+	  			
+  					foreach ($stmt->fetchAll() as $row ) {
+  						echo '<h4 style="text-align:center;"><span class="label label-default">' . $row['title'] . ' by ' . $row['author_name'] . "</span></h4><br />";
+  					}
+
   				}  				
 			}
 
