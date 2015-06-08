@@ -208,6 +208,7 @@
 		<h4><span class="label label-default">Insert Author 2 (optional):</span></h4>
 		<input type="text" class="form-control input-inline" id="usr2" name="author2" placeholder="Michael Reaves">
 		<h4><span class="label label-default">Insert Main Characters (comma separated):</span></h4>
+		<h4><span class="label label-default">Please put a space after every comma</span></h4>
 		<textarea class="form-control input-inline" rows="6" id="person" cols="22"name="character" placeholder="Luke Skywalker, Han Solo, etc..." required></textarea>
 		<h4><span class="label label-default">Insert Title With 'Star Wars: '</span></h4>
 		<input type="text" class="form-control input-inline" id="book" name="book" placeholder="Star Wars: Dark Force Rising" required>
